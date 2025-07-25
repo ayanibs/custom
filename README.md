@@ -14,7 +14,14 @@ kiosk_app/
 ├── assets/
 └── app.py
 
-1. pip install customtkinter
-2. pip install pillow
-3. pip install supabase
-4. ask for .env file
+1. Python (version 3.10+ recommended)
+2. customtkinter
+3. pillow
+4. python-dotenv
+5. supabase
+6. (Optional, but recommended) pip for package management
+
+You can install the Python packages using:
+└── app.pypip install customtkinter pillow python-dotenv supabase
+
+Make sure to also have your .env file with the required Supabase credentials.
