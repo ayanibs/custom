@@ -22,6 +22,6 @@ kiosk_app/
 6. (Optional, but recommended) pip for package management
 
 You can install the Python packages using:
-└── app.pypip install customtkinter pillow python-dotenv supabase
+└── pip install customtkinter pillow python-dotenv supabase
 
 Make sure to also have your .env file with the required Supabase credentials.
