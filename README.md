@@ -1,8 +1,3 @@
-1. pip install customtkinter
-2. pip install pillow
-3. pip install supabase
-4. ask for .env file
-
 kiosk_app/
 │
 ├── main.py
@@ -16,3 +11,8 @@ kiosk_app/
 |   ├── mood_screen.py
 |   └── logout_screen.py
 └── app.py
+
+1. pip install customtkinter
+2. pip install pillow
+3. pip install supabase
+4. ask for .env file
