@@ -1,56 +1,96 @@
 import customtkinter
 from PIL import Image
 import os
+from supabase_client import supabase
 
 customtkinter.set_appearance_mode("dark")
 
 
-class App(customtkinter.CTk):
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        self.bind("<Escape>", self.exit_fullscreen)
-        self.title("CustomTkinter example_background_image.py")
-        self.attributes('-fullscreen', True)  # Set fullscreen
-        self.resizable(False, False)
-        
+# LoginFrame is now a frame, not a root window
+class LoginFrame(customtkinter.CTkFrame):
+    def __init__(self, master, proceed_to_consent=None, *args, **kwargs):
+        super().__init__(master, *args, **kwargs)
+        self.master = master
+        self.proceed_to_consent = proceed_to_consent
 
         # load and create background image
         current_path = os.path.dirname(os.path.abspath(__file__))
         asset_path = os.path.join(current_path, "..", "assets", "background.png")
         self.bg_image = customtkinter.CTkImage(Image.open(asset_path),
-                                               size=(self.winfo_screenwidth(), self.winfo_screenheight()))
+                                             size=(self.master.winfo_screenwidth(), self.master.winfo_screenheight()))
         self.bg_image_label = customtkinter.CTkLabel(self, image=self.bg_image)
         self.bg_image_label.grid(row=0, column=0)
 
         # create login frame
         self.login_frame = customtkinter.CTkFrame(self, corner_radius=0)
         self.login_frame.grid(row=0, column=0, sticky="ns")
-        self.login_label = customtkinter.CTkLabel(self.login_frame, text="Welcome to VitalSense Kiosk",
-                                                  font=customtkinter.CTkFont(size=20, weight="bold"))
+        
+        # Welcome label
+        self.login_label = customtkinter.CTkLabel(self.login_frame, 
+                                                text="Welcome to VitalSense Kiosk",
+                                                font=customtkinter.CTkFont(size=20, weight="bold"))
         self.login_label.grid(row=0, column=0, padx=30, pady=(150, 15))
-        qr_area = customtkinter.CTkLabel(self.login_frame, text="[ QR Scanner Preview Here ]", 
-                                        font=("Arial", 16), fg_color="#f1f2f6", width=30, height=15)
-        qr_area.grid(row=1, column=0, padx=30, pady=(10, 15))  # Inserted here
 
-        # Corrected line: Use a new variable name and apply grid() to the label
-        self.manual_login_label = customtkinter.CTkLabel(self.login_frame, text="Can't proceed? Login manually.",
-                                                          font=customtkinter.CTkFont(size=12, weight="bold")) # Adjusted font size for better fit
-        self.manual_login_label.grid(row=2, column=0, padx=25, pady=(0, 15)) # Place it before the login button
-        self.login_button = customtkinter.CTkButton(self.login_frame, text="Login", command=self.login_event, width=200)
-        self.login_button.grid(row=3, column=0, padx=30, pady=(15, 15))
+        # ID Number entry
+        self.id_label = customtkinter.CTkLabel(self.login_frame, text="ID Number:",
+                                             font=customtkinter.CTkFont(size=14))
+        self.id_label.grid(row=1, column=0, padx=30, pady=(15, 5))
+        self.id_entry = customtkinter.CTkEntry(self.login_frame, width=200)
+        self.id_entry.grid(row=2, column=0, padx=30, pady=(0, 15))
 
-    def login_event(self):
-        print("Login pressed - username:", "password:")
+        # Password entry
+        self.password_label = customtkinter.CTkLabel(self.login_frame, text="Password:",
+                                                   font=customtkinter.CTkFont(size=14))
+        self.password_label.grid(row=3, column=0, padx=30, pady=(15, 5))
+        self.password_entry = customtkinter.CTkEntry(self.login_frame, width=200, show="*")
+        self.password_entry.grid(row=4, column=0, padx=30, pady=(0, 15))
 
-        self.login_frame.grid_forget()  # remove login frame
-        self.main_frame.grid(row=0, column=0, sticky="nsew", padx=100)  # show main frame
+        # Error message label
+        self.message = customtkinter.CTkLabel(self.login_frame, text="",
+                                            text_color="red",
+                                            font=customtkinter.CTkFont(size=12))
+        self.message.grid(row=5, column=0, padx=30, pady=(5, 15))
+
+        # Login button
+        self.login_button = customtkinter.CTkButton(self.login_frame, 
+                                                  text="Login", 
+                                                  command=self.validate_login,
+                                                  width=200)
+        self.login_button.grid(row=6, column=0, padx=30, pady=(15, 15))
+
+
+    def validate_login(self):
+        student_id = self.id_entry.get()
+        password = self.password_entry.get()
+        
+        if not student_id or not password:
+            self.message.configure(text="Please fill in all fields!")
+            return
+
+        try:
+            # First, get the email associated with the student ID
+            response = supabase.table('students').select('email').eq('student_id', student_id).execute()
+            
+            if response.data:
+                email = response.data[0]['email']
+                # Attempt to sign in with the retrieved email and provided password
+                auth_response = supabase.auth.sign_in_with_password({
+                    "email": email,
+                    "password": password
+                })
+                
+                if auth_response.user:
+                    self.message.configure(text="Login successful!", text_color="green")
+                    # Proceed to consent page after login
+                    if self.proceed_to_consent:
+                        self.after(1000, lambda: self.proceed_to_consent(student_id))
+                else:
+                    self.message.configure(text="Invalid credentials!", text_color="red")
+            else:
+                self.message.configure(text="Student ID not found!", text_color="red")
+                
+        except Exception as e:
+            self.message.configure(text=f"Login failed: {str(e)}", text_color="red")
 
     def exit_fullscreen(self, event=None):
-        self.destroy()  # or self.attributes('-fullscreen', False) to toggle
-
-
-if __name__ == "__main__":
-    app = App()
-    app.mainloop()
+        self.master.destroy()
