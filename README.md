@@ -10,6 +10,8 @@ kiosk_app/
 |   ├── vitalsigns_screen.py
 |   ├── mood_screen.py
 |   └── logout_screen.py
+├── __init__.py
+├── assets/
 └── app.py
 
 1. pip install customtkinter
