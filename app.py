@@ -4,7 +4,7 @@ from screens.qr import QRFrame
 from screens.consent import ConsentScreen
 from screens.profile import ProfileScreen
 from screens.temperature import TemperatureScreen
-from supabase_client import supabase
+from config.supabase_client import supabase
 
 
 class KioskApp(customtkinter.CTk):

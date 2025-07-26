@@ -2,7 +2,7 @@
 import customtkinter
 from PIL import Image
 import os
-from supabase_client import supabase
+from config.supabase_client import supabase
 from datetime import datetime
 
 consent = "Do you agree to share your recorded health and emotional status data with the University Clinic and the Office of Guidance and Counseling Services to help monitor your well-being while enrolled at USTP?"

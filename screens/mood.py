@@ -2,7 +2,7 @@
 import customtkinter
 from PIL import Image
 import os
-from supabase_client import supabase
+from config.supabase_client import supabase
 from datetime import datetime
 import json
 

@@ -2,7 +2,7 @@
 import customtkinter
 from PIL import Image
 import os
-from supabase_client import supabase
+from config.supabase_client import supabase
 
 class LogoutScreen(customtkinter.CTkFrame):
     def __init__(self, master, logout_callback, student_id=None):

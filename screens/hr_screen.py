@@ -1,6 +1,8 @@
 import customtkinter
 from PIL import Image
 import os
+from config.supabase_client import supabase
+from datetime import datetime
 
 class HeartRateScreen(customtkinter.CTkFrame):
     def __init__(self, master, proceed_callback, student_id):
@@ -42,4 +44,26 @@ class HeartRateScreen(customtkinter.CTkFrame):
         self.next_button.pack(pady=(20, 0))
 
     def on_next(self):
+        heart_rate = self.entry.get()
+        if not heart_rate:
+            # Optionally show an error message
+            return
+
+        response = supabase.table("student_support_record").select("*").eq("student_id", self.student_id).single().execute()
+        existing = response.data if response.data else {}
+
+        record_time = existing.get("record_at", datetime.utcnow().isoformat())
+
+        data = {
+            "student_id": self.student_id,
+            "temperature": existing.get("temperature", ""),
+            "mood_level": existing.get("mood_level", ""),
+            "blood_pressure": existing.get("blood_pressure", ""),
+            "heart_rate": heart_rate,
+            "record_at": record_time
+        }
+        try:
+            supabase.table("student_support_record").upsert(data, on_conflict=["student_id"]).execute()
+        except Exception as e:
+            print("Error saving heart rate:", e)
         self.proceed_callback(self.student_id)
