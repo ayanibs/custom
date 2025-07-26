@@ -3,7 +3,7 @@ from screens.loginpage import LoginFrame
 from screens.qr import QRFrame
 from screens.consent import ConsentScreen
 from screens.profile import ProfileScreen
-from screens.vitalsigns import VitalsignsScreen
+from screens.temperature import TemperatureScreen
 from supabase_client import supabase
 
 
@@ -53,14 +53,31 @@ class KioskApp(customtkinter.CTk):
             print(f"Error fetching student data: {e}")
             student_data = {"student_id": student_id}
         # Pass a callback that includes the student_id for vitalsigns
-        self.current_frame = ProfileScreen(self, proceed_callback=lambda: self.show_next_page(student_data.get('student_id', '')), student_data=student_data)
+        self.current_frame = ProfileScreen(
+            self,
+            proceed_callback=lambda: self.show_temperature_page(student_data.get('student_id', '')),
+            student_data=student_data
+        )
         self.current_frame.pack(fill="both", expand=True)
 
-    def show_next_page(self, student_id):
-        # Proceed to vitalsigns page after profile
+    def show_temperature_page(self, student_id):
         if self.current_frame:
             self.current_frame.destroy()
-        self.current_frame = VitalsignsScreen(self, proceed_callback=lambda: self.show_mood_page(student_id), student_id=student_id)
+        self.current_frame = TemperatureScreen(self, proceed_callback=lambda sid=student_id: self.show_bp_page(sid), student_id=student_id)
+        self.current_frame.pack(fill="both", expand=True)
+
+    def show_bp_page(self, student_id):
+        if self.current_frame:
+            self.current_frame.destroy()
+        from screens.bp_screen import BloodPressureScreen
+        self.current_frame = BloodPressureScreen(self, proceed_callback=lambda sid=student_id: self.show_hr_page(sid), student_id=student_id)
+        self.current_frame.pack(fill="both", expand=True)
+
+    def show_hr_page(self, student_id):
+        if self.current_frame:
+            self.current_frame.destroy()
+        from screens.hr_screen import HeartRateScreen
+        self.current_frame = HeartRateScreen(self, proceed_callback=lambda sid=student_id: self.show_mood_page(sid), student_id=student_id)
         self.current_frame.pack(fill="both", expand=True)
 
     def show_mood_page(self, student_id):

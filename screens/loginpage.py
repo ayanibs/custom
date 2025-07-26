@@ -22,41 +22,43 @@ class LoginFrame(customtkinter.CTkFrame):
         self.bg_image_label.grid(row=0, column=0)
 
         # create login frame
-        self.login_frame = customtkinter.CTkFrame(self, corner_radius=0)
-        self.login_frame.grid(row=0, column=0, sticky="ns")
+        self.login_frame = customtkinter.CTkFrame(self, corner_radius=10)
+        self.login_frame.grid(row=0, column=0, padx=40, pady=40)
+
         
+        image_path = os.path.join(current_path, "..", "assets", "logo.png")
+
+        self.image = customtkinter.CTkImage(Image.open(image_path), size=(170, 170))
+        self.image_label = customtkinter.CTkLabel(self.login_frame, image=self.image, text="")
+        self.image_label.grid(row=1, column=0, padx=30, pady=(10, 15)) 
+
         # Welcome label
         self.login_label = customtkinter.CTkLabel(self.login_frame, 
                                                 text="Welcome to VitalSense Kiosk",
                                                 font=customtkinter.CTkFont(size=20, weight="bold"))
-        self.login_label.grid(row=0, column=0, padx=30, pady=(150, 15))
+        self.login_label.grid(row=2, column=0, padx=30, pady=(10, 15))
 
-        # ID Number entry
-        self.id_label = customtkinter.CTkLabel(self.login_frame, text="ID Number:",
-                                             font=customtkinter.CTkFont(size=14))
-        self.id_label.grid(row=1, column=0, padx=30, pady=(15, 5))
-        self.id_entry = customtkinter.CTkEntry(self.login_frame, width=200)
-        self.id_entry.grid(row=2, column=0, padx=30, pady=(0, 15))
 
-        # Password entry
-        self.password_label = customtkinter.CTkLabel(self.login_frame, text="Password:",
-                                                   font=customtkinter.CTkFont(size=14))
-        self.password_label.grid(row=3, column=0, padx=30, pady=(15, 5))
-        self.password_entry = customtkinter.CTkEntry(self.login_frame, width=200, show="*")
-        self.password_entry.grid(row=4, column=0, padx=30, pady=(0, 15))
+        # Student ID and Password entry fields
+        self.id_entry = customtkinter.CTkEntry(self.login_frame, width=200, placeholder_text="Enter Student ID")
+        self.id_entry.grid(row=4, column=0, padx=30, pady=(0, 15))
+
+        self.password_entry = customtkinter.CTkEntry(self.login_frame, width=200, placeholder_text="Password",show="*")
+        self.password_entry.grid(row=5, column=0, padx=30, pady=(15, 15))
+
 
         # Error message label
         self.message = customtkinter.CTkLabel(self.login_frame, text="",
                                             text_color="red",
                                             font=customtkinter.CTkFont(size=12))
-        self.message.grid(row=5, column=0, padx=30, pady=(5, 15))
+        self.message.grid(row=6, column=0, padx=30, pady=(0, 15))
 
         # Login button
         self.login_button = customtkinter.CTkButton(self.login_frame, 
                                                   text="Login", 
                                                   command=self.validate_login,
                                                   width=200)
-        self.login_button.grid(row=6, column=0, padx=30, pady=(15, 15))
+        self.login_button.grid(row=6, column=0, padx=30, pady=(50, 15))
 
 
     def validate_login(self):
