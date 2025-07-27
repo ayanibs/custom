@@ -9,12 +9,13 @@ consent = "Do you agree to share your recorded health and emotional status data 
 
 
 class ConsentScreen(customtkinter.CTkFrame):
-    def __init__(self, master, proceed_callback, student_id):
+    def __init__(self, master, on_back, proceed_callback, student_id):
         super().__init__(master)
         self.master = master
         self.student_id = student_id
         self.proceed_callback = proceed_callback
         self.selected_consent = None
+        self.on_back = on_back
 
         # Load and create background image (same as login page)
         current_path = os.path.dirname(os.path.abspath(__file__))
@@ -53,10 +54,16 @@ class ConsentScreen(customtkinter.CTkFrame):
                                                       font=customtkinter.CTkFont(size=18), width=200)
         self.confirm_button.grid(row=2, column=0, pady=(20, 0))
 
+        self.logout_button = customtkinter.CTkButton(self.consent_frame, 
+                                                  text="Logout", 
+                                                  command=self.on_back,
+                                                  font=customtkinter.CTkFont(size=18), width=200)
+        self.logout_button.grid(row=3, column=0, pady=(40, 0))
+
         # Message label
         self.message = customtkinter.CTkLabel(self.consent_frame, text="", text_color="red",
                                               font=customtkinter.CTkFont(size=12))
-        self.message.grid(row=3, column=0, pady=(10, 0))
+        self.message.grid(row=4, column=0, pady=(10, 0))
 
     def handle_consent(self, consent_given):
         self.selected_consent = consent_given

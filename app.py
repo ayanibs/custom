@@ -36,7 +36,7 @@ class KioskApp(customtkinter.CTk):
         if self.current_frame:
             self.current_frame.destroy()
         # Pass a callback that takes student_id and shows the profile page
-        self.current_frame = ConsentScreen(self, proceed_callback=lambda: self.show_profile_page(student_id), student_id=student_id)
+        self.current_frame = ConsentScreen(self, on_back=self.show_login_page, proceed_callback=lambda: self.show_profile_page(student_id), student_id=student_id)
         self.current_frame.pack(fill="both", expand=True)
 
     def show_profile_page(self, student_id):
@@ -54,7 +54,8 @@ class KioskApp(customtkinter.CTk):
             student_data = {"student_id": student_id}
         # Pass a callback that includes the student_id for vitalsigns
         self.current_frame = ProfileScreen(
-            self,
+            self, 
+            on_back=lambda: self.show_consent_page(student_data.get('student_id', '')),
             proceed_callback=lambda: self.show_temperature_page(student_data.get('student_id', '')),
             student_data=student_data
         )

@@ -60,7 +60,7 @@ class LoginFrame(customtkinter.CTkFrame):
                                                   width=200)
         self.login_button.grid(row=6, column=0, padx=30, pady=(50, 15))
 
-
+    
     def validate_login(self):
         student_id = self.id_entry.get()
         password = self.password_entry.get()
