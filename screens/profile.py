@@ -1,15 +1,16 @@
 import customtkinter
 from PIL import Image
 import os
-from supabase_client import supabase
+from config.supabase_client import supabase
 from datetime import datetime
 
 
 class ProfileScreen(customtkinter.CTkFrame):
-    def __init__(self, master, proceed_callback, student_data=None):
+    def __init__(self, master, on_back, proceed_callback, student_data=None):
         super().__init__(master)
         self.master = master
         self.proceed_callback = proceed_callback
+        self.on_back = on_back
         self.student_id = (student_data or {}).get('student_id', '')
 
         # Load and create background image (same as login/consent)
@@ -72,6 +73,10 @@ class ProfileScreen(customtkinter.CTkFrame):
         self.contact_entry.insert(0, student_data.get('contact_number', ''))
 
         self.confirm_button = customtkinter.CTkButton(self.profile_frame, text="Confirm", command=self.update_profile,
+                                                     font=customtkinter.CTkFont(size=14), width=200)
+        self.confirm_button.pack(pady=20)
+
+        self.confirm_button = customtkinter.CTkButton(self.profile_frame, text="Back", command=self.on_back,
                                                      font=customtkinter.CTkFont(size=14), width=200)
         self.confirm_button.pack(pady=20)
 
