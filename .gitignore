@@ -1,0 +1,7 @@
+# cache
+*.pyc 
+
+# env files
+env/
+venv/
+.env
