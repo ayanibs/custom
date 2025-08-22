@@ -1,4 +1,5 @@
 import customtkinter
+from screens.welcome import WelcomeScreen
 from screens.loginpage import LoginFrame
 from screens.qr import QRFrame
 from screens.consent import ConsentScreen
@@ -15,8 +16,14 @@ class KioskApp(customtkinter.CTk):
         self.bind("<Escape>", self.exit_fullscreen)  # Allow exit fullscreen with Escape key
         self.resizable(False, False)
         self.current_frame = None
-        self.show_qr_page()
+        self.show_welcome_page()  # Show welcome screen first
 
+
+    def show_welcome_page(self):
+        if self.current_frame:
+            self.current_frame.destroy()
+        self.current_frame = WelcomeScreen(self, proceed_callback=self.show_qr_page)
+        self.current_frame.pack(fill="both", expand=True)
 
     def show_login_page(self):
         if self.current_frame:
