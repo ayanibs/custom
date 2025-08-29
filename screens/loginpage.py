@@ -2,6 +2,8 @@ import customtkinter
 from PIL import Image
 import os
 from config.supabase_client import supabase
+import subprocess
+import sys
 
 customtkinter.set_appearance_mode("dark")
 
@@ -14,16 +16,8 @@ class LoginFrame(customtkinter.CTkFrame):
         # Asset paths
         current_path = os.path.dirname(os.path.abspath(__file__))
         assets_path = os.path.join(current_path, "..", "assets")
-        bg_path = os.path.join(assets_path, "background.png")
         logo_path = os.path.join(assets_path, "logo.png")
 
-        # Background image
-        self.bg_image = customtkinter.CTkImage(
-            Image.open(bg_path),
-            size=(self.master.winfo_screenwidth(), self.master.winfo_screenheight())
-        )
-        self.bg_label = customtkinter.CTkLabel(self, image=self.bg_image, text="")
-        self.bg_label.place(relx=0, rely=0, relwidth=1, relheight=1)
 
         # Main frame (left side, solid color)
         self.login_frame = customtkinter.CTkFrame(self, fg_color="#222222", corner_radius=10)
@@ -78,6 +72,10 @@ class LoginFrame(customtkinter.CTkFrame):
         )
         self.vitalsense_label.place(relx=0.62, rely=0.48)
 
+        # Bind focus events to show keyboard
+        self.id_entry.bind("<FocusIn>", lambda event: show_keyboard())
+        self.password_entry.bind("<FocusIn>", lambda event: show_keyboard())
+
     def validate_login(self):
         student_id = self.id_entry.get()
         password = self.password_entry.get()
@@ -102,6 +100,7 @@ class LoginFrame(customtkinter.CTkFrame):
                     self.message.configure(text="Login successful!", text_color="green")
                     # Proceed to consent page after login
                     if self.proceed_to_consent:
+                        close_keyboard()  # <-- Close keyboard here
                         self.after(1000, lambda: self.proceed_to_consent(student_id))
                 else:
                     self.message.configure(text="Invalid credentials!", text_color="red")
@@ -113,3 +112,17 @@ class LoginFrame(customtkinter.CTkFrame):
 
     def exit_fullscreen(self, event=None):
         self.master.destroy()
+
+def show_keyboard():
+    if sys.platform.startswith("linux"):
+        subprocess.Popen(["onboard"])
+    elif sys.platform.startswith("win"):
+        import os
+        os.startfile("osk.exe")
+
+def close_keyboard():
+    if sys.platform.startswith("linux"):
+        subprocess.Popen(["pkill", "onboard"])
+    elif sys.platform.startswith("win"):
+        import os
+        os.system("taskkill /IM osk.exe /F")

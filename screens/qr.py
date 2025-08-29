@@ -12,17 +12,8 @@ class QRFrame(customtkinter.CTkFrame):
         # Paths
         current_path = os.path.dirname(os.path.abspath(__file__))
         assets_path = os.path.join(current_path, "..", "assets")
-        bg_path = os.path.join(assets_path, "background.png")
         qr_path = os.path.join(assets_path, "qr.png")
         logo_path = os.path.join(assets_path, "logo.png")
-
-        # Background image
-        self.bg_image = customtkinter.CTkImage(
-            Image.open(bg_path),
-            size=(self.master.winfo_screenwidth(), self.master.winfo_screenheight())
-        )
-        self.bg_label = customtkinter.CTkLabel(self, image=self.bg_image, text="")
-        self.bg_label.place(relx=0, rely=0, relwidth=1, relheight=1)
 
         # Main QR frame (left side, solid color, blue border)
         self.qr_frame = customtkinter.CTkFrame(

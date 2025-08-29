@@ -13,17 +13,10 @@ class WelcomeScreen(customtkinter.CTkFrame):
         # Get asset paths
         current_path = os.path.dirname(os.path.abspath(__file__))
         assets_path = os.path.join(current_path, "..", "assets")
-        bg_path = os.path.join(assets_path, "background.png")
         mood_path = os.path.join(assets_path, "mood.png")
         vital_path = os.path.join(assets_path, "vital.png")
 
-        # Set background image
-        self.bg_image = customtkinter.CTkImage(
-            Image.open(bg_path),
-            size=(self.master.winfo_screenwidth(), self.master.winfo_screenheight())
-        )
-        self.bg_label = customtkinter.CTkLabel(self, image=self.bg_image, text="")
-        self.bg_label.place(relx=0, rely=0, relwidth=1, relheight=1)
+
 
         # Overlay frame (centered, solid color)
         self.overlay = customtkinter.CTkFrame(self, fg_color="#222222", corner_radius=10)
@@ -60,7 +53,6 @@ class WelcomeScreen(customtkinter.CTkFrame):
         # Bind any click/touch to proceed
         self.bind("<Button-1>", self.on_click)
         self.overlay.bind("<Button-1>", self.on_click)
-        self.bg_label.bind("<Button-1>", self.on_click)
 
     def on_click(self, event):
         if self.proceed_callback:
