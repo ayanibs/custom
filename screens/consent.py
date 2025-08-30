@@ -1,4 +1,3 @@
-
 import customtkinter
 from config.supabase_client import supabase
 from datetime import datetime
@@ -15,46 +14,57 @@ class ConsentScreen(customtkinter.CTkFrame):
         self.selected_consent = None
         self.on_back = on_back
 
+        # Create consent frame (centered, solid color)
+        self.consent_frame = customtkinter.CTkFrame(self, corner_radius=10)
+        self.consent_frame.place(relx=0.08, rely=0.08, relwidth=0.83, relheight=0.8)
 
-        # Create consent frame (like login frame)
-        self.consent_frame = customtkinter.CTkFrame(self, corner_radius=0)
-        self.consent_frame.grid(row=0, column=0, sticky="ns")
+        # consent label
+        self.consent_label = customtkinter.CTkLabel(
+            self.consent_frame, text=consent, wraplength=600,
+            font=customtkinter.CTkFont(size=18, weight="bold"), justify="center"
+        )
+        self.consent_label.place(relx=0.5, rely=0.4, anchor="center")
 
-        # Consent label
-        self.consent_label = customtkinter.CTkLabel(self.consent_frame, text=consent, wraplength=600,
-                                                    font=customtkinter.CTkFont(size=18, weight="bold"), justify="center")
-        self.consent_label.grid(row=0, column=0, padx=30, pady=(100, 30))
-
-        # Button frame
+        # Button frame for Yes/No
         self.button_frame = customtkinter.CTkFrame(self.consent_frame, fg_color="transparent")
-        self.button_frame.grid(row=1, column=0, pady=20)
+        self.button_frame.place(relx=0.5, rely=0.65, anchor="center")
 
-        self.yes_button = customtkinter.CTkButton(self.button_frame, text="Yes", width=100,
-                                                  command=lambda: self.handle_consent(True),
-                                                  font=customtkinter.CTkFont(size=16))
-        self.yes_button.pack(side="left", padx=20)
+        self.yes_button = customtkinter.CTkButton(
+            self.button_frame, text="Yes", width=120, height=40,
+            command=lambda: self.handle_consent(True),
+            font=customtkinter.CTkFont(size=16)
+        )
+        self.yes_button.pack(side="left", padx=30)
 
-        self.no_button = customtkinter.CTkButton(self.button_frame, text="No", width=100,
-                                                 command=lambda: self.handle_consent(False),
-                                                 font=customtkinter.CTkFont(size=16))
-        self.no_button.pack(side="left", padx=20)
+        self.no_button = customtkinter.CTkButton(
+            self.button_frame, text="No", width=120, height=40,
+            command=lambda: self.handle_consent(False),
+            font=customtkinter.CTkFont(size=16)
+        )
+        self.no_button.pack(side="left", padx=30)
 
         # Confirm button
-        self.confirm_button = customtkinter.CTkButton(self.consent_frame, text="Confirm",
-                                                      command=self.confirm_and_proceed,
-                                                      font=customtkinter.CTkFont(size=18), width=200)
-        self.confirm_button.grid(row=2, column=0, pady=(20, 0))
+        self.confirm_button = customtkinter.CTkButton(
+            self.consent_frame, text="Confirm",
+            command=self.confirm_and_proceed,
+            font=customtkinter.CTkFont(size=18), width=200, height=40
+        )
+        self.confirm_button.pack(pady=(0, 20), side="bottom")
 
-        self.logout_button = customtkinter.CTkButton(self.consent_frame, 
-                                                  text="Logout", 
-                                                  command=self.on_back,
-                                                  font=customtkinter.CTkFont(size=18), width=200)
-        self.logout_button.grid(row=3, column=0, pady=(40, 0))
+        # Logout button
+        self.logout_button = customtkinter.CTkButton(
+            self.consent_frame, text="Logout",
+            command=self.on_back,
+            font=customtkinter.CTkFont(size=18), width=200, height=40
+        )
+        self.logout_button.pack(pady=(0, 20), side="bottom")
 
         # Message label
-        self.message = customtkinter.CTkLabel(self.consent_frame, text="", text_color="red",
-                                              font=customtkinter.CTkFont(size=12))
-        self.message.grid(row=4, column=0, pady=(10, 0))
+        self.message = customtkinter.CTkLabel(
+            self.consent_frame, text="", text_color="red",
+            font=customtkinter.CTkFont(size=12)
+        )
+        self.message.pack(pady=(0, 10), anchor="center")
 
     def handle_consent(self, consent_given):
         self.selected_consent = consent_given

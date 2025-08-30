@@ -2,7 +2,6 @@ import customtkinter
 from PIL import Image
 import os
 
-customtkinter.set_appearance_mode("dark")
 
 class QRFrame(customtkinter.CTkFrame):
     def __init__(self, master, *args, **kwargs):
@@ -21,36 +20,36 @@ class QRFrame(customtkinter.CTkFrame):
         )
         self.qr_frame.place(relx=0.08, rely=0.08, relwidth=0.45, relheight=0.7)
 
-        # QR image
-        self.qr_img = customtkinter.CTkImage(Image.open(qr_path), size=(180, 180))
+        # QR image (centered vertically)
+        self.qr_img = customtkinter.CTkImage(Image.open(qr_path), size=(200, 200))
         self.qr_label = customtkinter.CTkLabel(self.qr_frame, image=self.qr_img, text="")
-        self.qr_label.pack(pady=(40, 10))
+        self.qr_label.pack(pady=(0, 20), expand=True)  # expand centers it vertically
 
-        # Scan instruction
+        # Scan instruction (below QR image)
         self.scan_label = customtkinter.CTkLabel(
             self.qr_frame, text="Scan your Student ID QR code",
             font=customtkinter.CTkFont(size=16)
         )
-        self.scan_label.pack(pady=(0, 20))
+        self.scan_label.pack(pady=(0, 30))
 
-        # Login button
+        # Login button (bottom, with space)
         self.login_button = customtkinter.CTkButton(
             self.qr_frame, text="LOGIN", width=200, height=40,
             font=customtkinter.CTkFont(size=16, weight="bold"),
             command=self.proceed_to_login
         )
-        self.login_button.pack(pady=(0, 30))
+        self.login_button.pack(pady=(0, 40))
 
         # Logo and text (right side)
-        self.logo_img = customtkinter.CTkImage(Image.open(logo_path), size=(180, 180))
+        self.logo_img = customtkinter.CTkImage(Image.open(logo_path), size=(250, 250))
         self.logo_label = customtkinter.CTkLabel(self, image=self.logo_img, text="")
-        self.logo_label.place(relx=0.62, rely=0.18)
+        self.logo_label.place(relx=0.7, rely=0.21)
 
         self.vitalsense_label = customtkinter.CTkLabel(
             self, text="VITALSENSE",
             font=customtkinter.CTkFont(size=36, weight="bold")
         )
-        self.vitalsense_label.place(relx=0.62, rely=0.48)
+        self.vitalsense_label.place(relx=0.72, rely=0.65)
 
     def proceed_to_login(self):
         self.master.show_login_page()
