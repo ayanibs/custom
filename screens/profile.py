@@ -1,6 +1,4 @@
 import customtkinter
-from PIL import Image
-import os
 from config.supabase_client import supabase
 from datetime import datetime
 
@@ -12,14 +10,6 @@ class ProfileScreen(customtkinter.CTkFrame):
         self.proceed_callback = proceed_callback
         self.on_back = on_back
         self.student_id = (student_data or {}).get('student_id', '')
-
-        # Load and create background image (same as login/consent)
-        current_path = os.path.dirname(os.path.abspath(__file__))
-        asset_path = os.path.join(current_path, "..", "assets", "background.png")
-        self.bg_image = customtkinter.CTkImage(Image.open(asset_path),
-                                              size=(self.master.winfo_screenwidth(), self.master.winfo_screenheight()))
-        self.bg_image_label = customtkinter.CTkLabel(self, image=self.bg_image, text="")
-        self.bg_image_label.grid(row=0, column=0)
 
         # Create profile frame
         self.profile_frame = customtkinter.CTkFrame(self, corner_radius=0)

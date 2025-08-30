@@ -1,6 +1,4 @@
 import customtkinter
-from PIL import Image
-import os
 from config.supabase_client import supabase
 from datetime import datetime
 
@@ -9,16 +7,6 @@ class BloodPressureScreen(customtkinter.CTkFrame):
         super().__init__(master)
         self.student_id = student_id
         self.proceed_callback = proceed_callback
-
-        # Load and display background image
-        current_path = os.path.dirname(os.path.abspath(__file__))
-        asset_path = os.path.join(current_path, "..", "assets", "background.png")
-        self.bg_image = customtkinter.CTkImage(
-            Image.open(asset_path),
-            size=(master.winfo_screenwidth(), master.winfo_screenheight())
-        )
-        self.bg_image_label = customtkinter.CTkLabel(self, image=self.bg_image, text="")
-        self.bg_image_label.place(relx=0.5, rely=0.5, anchor="center")
 
         # Centered frame above background
         self.center_frame = customtkinter.CTkFrame(self, width=350, height=250, corner_radius=15)
