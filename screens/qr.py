@@ -2,43 +2,54 @@ import customtkinter
 from PIL import Image
 import os
 
-customtkinter.set_appearance_mode("dark")
 
-# QRFrame 
 class QRFrame(customtkinter.CTkFrame):
     def __init__(self, master, *args, **kwargs):
         super().__init__(master, *args, **kwargs)
         self.master = master
 
-        # load and create background image
+        # Paths
         current_path = os.path.dirname(os.path.abspath(__file__))
+        assets_path = os.path.join(current_path, "..", "assets")
+        qr_path = os.path.join(assets_path, "qr.png")
+        logo_path = os.path.join(assets_path, "logo.png")
 
-        asset_path = os.path.join(current_path, "..", "assets", "background.png")
-        self.bg_image = customtkinter.CTkImage(Image.open(asset_path),
-                                               size=(self.master.winfo_screenwidth(), self.master.winfo_screenheight()))
-        self.bg_image_label = customtkinter.CTkLabel(self, image=self.bg_image)
-        self.bg_image_label.grid(row=0, column=0)
+        # Main QR frame (left side, solid color, blue border)
+        self.qr_frame = customtkinter.CTkFrame(
+            self, fg_color="#222222", corner_radius=10, border_width=3, border_color="#2196F3"
+        )
+        self.qr_frame.place(relx=0.08, rely=0.08, relwidth=0.45, relheight=0.7)
 
-        # login frame
-        self.login_frame = customtkinter.CTkFrame(self, corner_radius=10)
-        self.login_frame.grid(row=0, column=0, sticky="ns")
-        self.login_label = customtkinter.CTkLabel(self.login_frame, text="Welcome to VitalSense Kiosk",
-                                                  font=customtkinter.CTkFont(size=40, weight="bold"))
-        self.login_label.grid(row=0, column=0, padx=30, pady=(150, 15))
+        # QR image (centered vertically)
+        self.qr_img = customtkinter.CTkImage(Image.open(qr_path), size=(200, 200))
+        self.qr_label = customtkinter.CTkLabel(self.qr_frame, image=self.qr_img, text="")
+        self.qr_label.pack(pady=(0, 20), expand=True)  # expand centers it vertically
 
-        # Load and create the image to be displayed
-        image_path = os.path.join(current_path, "..", "assets", "qr.png")
+        # Scan instruction (below QR image)
+        self.scan_label = customtkinter.CTkLabel(
+            self.qr_frame, text="Scan your Student ID QR code",
+            font=customtkinter.CTkFont(size=16)
+        )
+        self.scan_label.pack(pady=(0, 30))
 
-        self.image = customtkinter.CTkImage(Image.open(image_path), size=(300, 300))
-        self.image_label = customtkinter.CTkLabel(self.login_frame, image=self.image, text="")
-        self.image_label.grid(row=2, column=0, padx=30, pady=(10, 15)) 
+        # Login button (bottom, with space)
+        self.login_button = customtkinter.CTkButton(
+            self.qr_frame, text="LOGIN", width=200, height=40,
+            font=customtkinter.CTkFont(size=16, weight="bold"),
+            command=self.proceed_to_login
+        )
+        self.login_button.pack(pady=(0, 40))
 
-        self.manual_login_label = customtkinter.CTkLabel(self.login_frame, text="Can't proceed? Login manually.",
-                                                        font=customtkinter.CTkFont(size=12, weight="bold"))
-        self.manual_login_label.grid(row=3, column=0, padx=25, pady=(0, 15))
-        
-        self.proceed_button = customtkinter.CTkButton(self.login_frame, text="Proceed to Login", command=self.proceed_to_login)
-        self.proceed_button.grid(row=4, column=0, padx=30, pady=(15, 15))
+        # Logo and text (right side)
+        self.logo_img = customtkinter.CTkImage(Image.open(logo_path), size=(250, 250))
+        self.logo_label = customtkinter.CTkLabel(self, image=self.logo_img, text="")
+        self.logo_label.place(relx=0.7, rely=0.21)
+
+        self.vitalsense_label = customtkinter.CTkLabel(
+            self, text="VITALSENSE",
+            font=customtkinter.CTkFont(size=36, weight="bold")
+        )
+        self.vitalsense_label.place(relx=0.72, rely=0.65)
 
     def proceed_to_login(self):
         self.master.show_login_page()

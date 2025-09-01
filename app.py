@@ -1,4 +1,5 @@
 import customtkinter
+from screens.welcome import WelcomeScreen
 from screens.loginpage import LoginFrame
 from screens.qr import QRFrame
 from screens.consent import ConsentScreen
@@ -15,8 +16,14 @@ class KioskApp(customtkinter.CTk):
         self.bind("<Escape>", self.exit_fullscreen)  # Allow exit fullscreen with Escape key
         self.resizable(False, False)
         self.current_frame = None
-        self.show_qr_page()
+        self.show_welcome_page()  # Show welcome screen first
 
+
+    def show_welcome_page(self):
+        if self.current_frame:
+            self.current_frame.destroy()
+        self.current_frame = WelcomeScreen(self, proceed_callback=self.show_qr_page)
+        self.current_frame.pack(fill="both", expand=True)
 
     def show_login_page(self):
         if self.current_frame:
@@ -54,8 +61,7 @@ class KioskApp(customtkinter.CTk):
             student_data = {"student_id": student_id}
         # Pass a callback that includes the student_id for vitalsigns
         self.current_frame = ProfileScreen(
-            self, 
-            on_back=lambda: self.show_consent_page(student_data.get('student_id', '')),
+            self, on_back=lambda: self.show_consent_page(student_data.get('student_id', '')),
             proceed_callback=lambda: self.show_temperature_page(student_data.get('student_id', '')),
             student_data=student_data
         )
@@ -64,21 +70,31 @@ class KioskApp(customtkinter.CTk):
     def show_temperature_page(self, student_id):
         if self.current_frame:
             self.current_frame.destroy()
-        self.current_frame = TemperatureScreen(self, proceed_callback=lambda sid=student_id: self.show_bp_page(sid), student_id=student_id)
+        self.current_frame = TemperatureScreen(self, on_back=lambda sid=student_id: self.show_profile_page(sid), proceed_callback=lambda sid=student_id: self.show_bp_page(sid), student_id=student_id)
         self.current_frame.pack(fill="both", expand=True)
 
     def show_bp_page(self, student_id):
         if self.current_frame:
             self.current_frame.destroy()
         from screens.bp_screen import BloodPressureScreen
-        self.current_frame = BloodPressureScreen(self, proceed_callback=lambda sid=student_id: self.show_hr_page(sid), student_id=student_id)
+        self.current_frame = BloodPressureScreen(
+            self,
+            proceed_callback=lambda sid=student_id: self.show_hr_page(sid),
+            student_id=student_id,
+            on_back=lambda sid=student_id: self.show_temperature_page(sid)  # <-- Add this
+        )
         self.current_frame.pack(fill="both", expand=True)
 
     def show_hr_page(self, student_id):
         if self.current_frame:
             self.current_frame.destroy()
         from screens.hr_screen import HeartRateScreen
-        self.current_frame = HeartRateScreen(self, proceed_callback=lambda sid=student_id: self.show_mood_page(sid), student_id=student_id)
+        self.current_frame = HeartRateScreen(
+            self,
+            proceed_callback=lambda sid=student_id: self.show_mood_page(sid),
+            student_id=student_id,
+            on_back=lambda sid=student_id: self.show_bp_page(sid)  # <-- Add this
+        )
         self.current_frame.pack(fill="both", expand=True)
 
     def show_mood_page(self, student_id):
