@@ -28,17 +28,17 @@ class WelcomeScreen(customtkinter.CTkFrame):
 
         # Images row (centered vertically with expand)
         images_frame = customtkinter.CTkFrame(self.overlay, fg_color="#222222")
-        images_frame.pack(expand=True, fill="both", pady=(0, 0))  # Use expand and fill
+        images_frame.pack(expand=True, fill="both", pady=(0, 0))
 
         # Mood image
-        self.mood_img = customtkinter.CTkImage(Image.open(mood_path), size=(180, 180))
+        self.mood_img = customtkinter.CTkImage(Image.open(mood_path), size=(700, 400))
         self.mood_label = customtkinter.CTkLabel(images_frame, image=self.mood_img, text="")
-        self.mood_label.grid(row=0, column=0, padx=(0, 60), pady=0, sticky="e")
+        self.mood_label.grid(row=0, column=0, padx=(0, 8), pady=0, sticky="e")  # Small space
 
         # Vital image
-        self.vital_img = customtkinter.CTkImage(Image.open(vital_path), size=(180, 180))
+        self.vital_img = customtkinter.CTkImage(Image.open(vital_path), size=(700, 400))
         self.vital_label = customtkinter.CTkLabel(images_frame, image=self.vital_img, text="")
-        self.vital_label.grid(row=0, column=1, padx=(60, 0), pady=0, sticky="w")
+        self.vital_label.grid(row=0, column=1, padx=(8, 0), pady=0, sticky="w")  # Small space
 
         # Make columns expand equally
         images_frame.grid_columnconfigure(0, weight=1)
