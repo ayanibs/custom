@@ -1,12 +1,9 @@
-
 import customtkinter
 from PIL import Image
 import os
 from config.supabase_client import supabase
 from datetime import datetime
 import json
-
-
 
 class MoodScreen(customtkinter.CTkFrame):
     def __init__(self, master, proceed_callback, on_back, student_id):
@@ -19,53 +16,86 @@ class MoodScreen(customtkinter.CTkFrame):
 
         # Create mood frame
         self.mood_frame = customtkinter.CTkFrame(self, corner_radius=0)
-        self.mood_frame.grid(row=0, column=0, sticky="ns")
+        self.mood_frame.place(relx=0.1, rely=0.1, relwidth=0.8, relheight=0.8)
 
         # Header label
-        self.header_label = customtkinter.CTkLabel(self.mood_frame, text="How are you feeling today?", font=customtkinter.CTkFont(size=18, weight="bold"))
+        self.header_label = customtkinter.CTkLabel(
+            self.mood_frame, text="How are you feeling today?",
+            font=customtkinter.CTkFont(size=18, weight="bold")
+        )
         self.header_label.pack(pady=30)
 
-        # Emotions
-        emotions = ["Happy", "Nothing", "Sad", "Worried", "Anxious"]
+        # Emotions split into two rows
+        row1 = ["Happy", "Sad", "Nothing", "Worried", "Anxious"]
+        row2 = ["Confused", "Fatigue", "Dizziness", "Numb", "Irritable"]
         self.emotion_buttons = {}
-        self.emotion_frame = customtkinter.CTkFrame(self.mood_frame)
-        self.emotion_frame.pack(pady=40)
-        for emotion in emotions:
-            btn = customtkinter.CTkButton(self.emotion_frame,
-                                          text=emotion,
-                                          font=customtkinter.CTkFont(size=16),
-                                          width=120,
-                                          height=40,
-                                          fg_color="lightgray",
-                                          text_color="black",
-                                          command=lambda e=emotion: self.toggle_emotion(e))
-            btn.pack(side="left", padx=20, pady=10)
+
+        # Frame for first row
+        self.emotion_frame1 = customtkinter.CTkFrame(
+            self.mood_frame, fg_color=self.mood_frame.cget("fg_color"))
+        self.emotion_frame1.pack(pady=(40, 10))
+        for emotion in row1:
+            btn = customtkinter.CTkButton(
+                self.emotion_frame1,
+                text=emotion,
+                font=customtkinter.CTkFont(size=16),
+                width=120,
+                height=40,
+                fg_color="lightgray",
+                text_color="black",
+                command=lambda e=emotion: self.toggle_emotion(e)
+            )
+            btn.pack(side="left", padx=12, pady=10)
             self.emotion_buttons[emotion] = btn
 
-        # Frame for Back and Confirm buttons
-        self.bottom_buttons_frame = customtkinter.CTkFrame(self.mood_frame)
+        # Frame for second row
+        self.emotion_frame2 = customtkinter.CTkFrame(
+            self.mood_frame, fg_color=self.mood_frame.cget("fg_color"))
+        self.emotion_frame2.pack(pady=(10, 40))
+        for emotion in row2:
+            btn = customtkinter.CTkButton(
+                self.emotion_frame2,
+                text=emotion,
+                font=customtkinter.CTkFont(size=16),
+                width=120,
+                height=40,
+                fg_color="lightgray",
+                text_color="black",
+                command=lambda e=emotion: self.toggle_emotion(e)
+            )
+            btn.pack(side="left", padx=12, pady=10)
+            self.emotion_buttons[emotion] = btn
+
+        # Frame for Back and Confirm buttons (same color as mood_frame)
+        self.bottom_buttons_frame = customtkinter.CTkFrame(
+            self.mood_frame, fg_color=self.mood_frame.cget("fg_color")
+        )
         self.bottom_buttons_frame.pack(side="bottom", fill="x", pady=50)
 
         # Back Button
-        self.back_button = customtkinter.CTkButton(self.bottom_buttons_frame,
-                                                   text="Back",
-                                                   font=customtkinter.CTkFont(size=18),
-                                                   fg_color="black",
-                                                   text_color="white",
-                                                   width=120,
-                                                   height=40,
-                                                   command=self.on_back)
+        self.back_button = customtkinter.CTkButton(
+            self.bottom_buttons_frame,
+            text="Back",
+            font=customtkinter.CTkFont(size=18),
+            fg_color="black",
+            text_color="white",
+            width=120,
+            height=40,
+            command=self.on_back
+        )
         self.back_button.pack(side="left", padx=(50, 0))
 
         # Confirm Button
-        self.confirm_button = customtkinter.CTkButton(self.bottom_buttons_frame,
-                                                      text="Confirm",
-                                                      font=customtkinter.CTkFont(size=18),
-                                                      fg_color="black",
-                                                      text_color="white",
-                                                      width=120,
-                                                      height=40,
-                                                      command=self.on_confirm)
+        self.confirm_button = customtkinter.CTkButton(
+            self.bottom_buttons_frame,
+            text="Confirm",
+            font=customtkinter.CTkFont(size=18),
+            fg_color="black",
+            text_color="white",
+            width=120,
+            height=40,
+            command=self.on_confirm
+        )
         self.confirm_button.pack(side="right", padx=(0, 50))
 
     def toggle_emotion(self, emotion):
@@ -83,6 +113,7 @@ class MoodScreen(customtkinter.CTkFrame):
 
         record_time = existing.get("record_at", datetime.utcnow().isoformat())
 
+        # Save all selected emotions as a JSON string in mood_level
         data = {
             "student_id": self.student_id,
             "mood_level": json.dumps(self.selected_emotions),

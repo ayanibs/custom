@@ -9,8 +9,8 @@ class LogoutScreen(customtkinter.CTkFrame):
         self.student_id = student_id
 
         # Create logout frame
-        self.logout_frame = customtkinter.CTkFrame(self, corner_radius=0)
-        self.logout_frame.grid(row=0, column=0, sticky="ns")
+        self.logout_frame = customtkinter.CTkFrame(self, corner_radius=10)
+        self.logout_frame.place(relx=0.1, rely=0.1, relwidth=0.8, relheight=0.8)
 
         # Thank you message
         self.thank_label = customtkinter.CTkLabel(self.logout_frame,
