@@ -25,7 +25,7 @@ class LoginFrame(customtkinter.CTkFrame):
         self.login_label = customtkinter.CTkLabel(
             self.login_frame,
             text="Welcome to VitalSense Kiosk",
-            font=customtkinter.CTkFont(size=28, weight="bold")
+            font=customtkinter.CTkFont(size=35, weight="bold", family="Helvetica")
         )
         self.login_label.pack(pady=(40, 30))
 
@@ -66,7 +66,7 @@ class LoginFrame(customtkinter.CTkFrame):
 
         self.vitalsense_label = customtkinter.CTkLabel(
             self, text="VITALSENSE",
-            font=customtkinter.CTkFont(size=36, weight="bold")
+            font=customtkinter.CTkFont(size=45, weight="bold", family="Helvetica")
         )
         self.vitalsense_label.place(relx=0.72, rely=0.65)
 

@@ -15,7 +15,7 @@ class LogoutScreen(customtkinter.CTkFrame):
         # Thank you message
         self.thank_label = customtkinter.CTkLabel(self.logout_frame,
             text="Thank you for using VITALSENSE!",
-            font=customtkinter.CTkFont(size=36, weight="bold"),
+            font=customtkinter.CTkFont(size=45, weight="bold", family="Helvetica"),
             text_color="black"
         )
         self.thank_label.pack(pady=(200, 20))
