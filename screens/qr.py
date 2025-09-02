@@ -4,9 +4,10 @@ import os
 
 
 class QRFrame(customtkinter.CTkFrame):
-    def __init__(self, master, *args, **kwargs):
+    def __init__(self, master, proceed_to_login=None, *args, **kwargs):
         super().__init__(master, *args, **kwargs)
         self.master = master
+        self.proceed_to_login_callback = proceed_to_login
 
         # Paths
         current_path = os.path.dirname(os.path.abspath(__file__))
@@ -15,9 +16,7 @@ class QRFrame(customtkinter.CTkFrame):
         logo_path = os.path.join(assets_path, "logo.png")
 
         # Main QR frame (left side, solid color, blue border)
-        self.qr_frame = customtkinter.CTkFrame(
-            self, fg_color="#222222", corner_radius=10, border_width=3, border_color="#2196F3"
-        )
+        self.qr_frame = customtkinter.CTkFrame(self, corner_radius=10, border_width=3)
         self.qr_frame.place(relx=0.08, rely=0.08, relwidth=0.45, relheight=0.7)
 
         # QR image (centered vertically)
@@ -47,10 +46,11 @@ class QRFrame(customtkinter.CTkFrame):
 
         self.vitalsense_label = customtkinter.CTkLabel(
             self, text="VITALSENSE",
-            font=customtkinter.CTkFont(size=36, weight="bold")
+            font=customtkinter.CTkFont(size=45, weight="bold", family="Helvetica")
         )
         self.vitalsense_label.place(relx=0.72, rely=0.65)
 
     def proceed_to_login(self):
+        print("Login button pressed")  # Debug
         self.master.show_login_page()
 

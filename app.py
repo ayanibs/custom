@@ -34,8 +34,10 @@ class KioskApp(customtkinter.CTk):
 
     def show_qr_page(self):
         if self.current_frame:
+            if hasattr(self.current_frame, "unbind_all_widgets"):
+                self.current_frame.unbind_all_widgets()
             self.current_frame.destroy()
-        self.current_frame = QRFrame(self)
+        self.current_frame = QRFrame(self, proceed_to_login=self.show_login_page)
         self.current_frame.pack(fill="both", expand=True)
 
 
