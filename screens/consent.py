@@ -16,7 +16,7 @@ class ConsentScreen(customtkinter.CTkFrame):
         self.on_back = on_back
 
         # Main consent frame
-        self.consent_frame = customtkinter.CTkFrame(self, corner_radius=10)
+        self.consent_frame = customtkinter.CTkFrame(self, corner_radius=10, border_width=3)
         self.consent_frame.place(relx=0.08, rely=0.08, relwidth=0.83, relheight=0.8)
 
         # Use grid for precise placement
@@ -32,7 +32,7 @@ class ConsentScreen(customtkinter.CTkFrame):
         # Consent label (top, centered, with space above)
         self.consent_label = customtkinter.CTkLabel(
             self.consent_frame, text=consent, wraplength=700,
-            font=customtkinter.CTkFont(size=18, weight="bold"), justify="center"
+            font=customtkinter.CTkFont(size=25, weight="bold"), justify="center"
         )
         self.consent_label.grid(row=1, column=0, columnspan=2, pady=(30, 30), sticky="n")
 
@@ -42,13 +42,13 @@ class ConsentScreen(customtkinter.CTkFrame):
         self.yes_button = customtkinter.CTkButton(
             self.button_frame, text="Yes", width=120, height=40,
             command=lambda: self.handle_consent(True),
-            font=customtkinter.CTkFont(size=16)
+            font=customtkinter.CTkFont(size=24)
         )
         self.yes_button.pack(side="left", padx=30)
         self.no_button = customtkinter.CTkButton(
             self.button_frame, text="No", width=120, height=40,
             command=lambda: self.handle_consent(False),
-            font=customtkinter.CTkFont(size=16)
+            font=customtkinter.CTkFont(size=24)
         )
         self.no_button.pack(side="left", padx=30)
 
@@ -63,7 +63,7 @@ class ConsentScreen(customtkinter.CTkFrame):
         self.logout_button = customtkinter.CTkButton(
             self.consent_frame, text="Logout",
             command=self.on_back,
-            font=customtkinter.CTkFont(size=18), width=200, height=40
+            font=customtkinter.CTkFont(size=24), width=200, height=40
         )
         self.logout_button.grid(row=5, column=0, padx=(40, 10), pady=(10, 30), sticky="sw")
 
@@ -71,7 +71,7 @@ class ConsentScreen(customtkinter.CTkFrame):
         self.confirm_button = customtkinter.CTkButton(
             self.consent_frame, text="Confirm",
             command=self.confirm_and_proceed,
-            font=customtkinter.CTkFont(size=18), width=200, height=40
+            font=customtkinter.CTkFont(size=24), width=200, height=40
         )
         self.confirm_button.grid(row=5, column=1, padx=(10, 40), pady=(10, 30), sticky="se")
 
