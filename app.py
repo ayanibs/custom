@@ -28,7 +28,11 @@ class KioskApp(customtkinter.CTk):
     def show_login_page(self):
         if self.current_frame:
             self.current_frame.destroy()
-        self.current_frame = LoginFrame(self, proceed_to_consent=self.show_consent_page)
+        self.current_frame = LoginFrame(
+            self,
+            proceed_to_consent=self.show_consent_page,
+            back_callback=self.show_welcome_page  # <-- Add this
+        )
         self.current_frame.pack(fill="both", expand=True)
 
 
