@@ -48,7 +48,7 @@ class QRFrame(customtkinter.CTkFrame):
             self, text="VITALSENSE",
             font=customtkinter.CTkFont(size=45, weight="bold", family="Helvetica")
         )
-        self.vitalsense_label.place(relx=0.72, rely=0.65)
+        self.vitalsense_label.place(relx=0.7, rely=0.65)
 
     def proceed_to_login(self):
         print("Login button pressed")  # Debug
