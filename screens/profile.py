@@ -11,84 +11,132 @@ class ProfileScreen(customtkinter.CTkFrame):
         self.on_back = on_back
         self.student_id = (student_data or {}).get('student_id', '')
 
-        # Create profile frame
-        self.profile_frame = customtkinter.CTkFrame(self, corner_radius=10)
+        # Centered profile frame
+        self.profile_frame = customtkinter.CTkFrame(self, corner_radius=10, border_width=3)
         self.profile_frame.place(relx=0.1, rely=0.1, relwidth=0.8, relheight=0.8)
 
-        # Instruction label
-        self.instruction_label = customtkinter.CTkLabel(self.profile_frame,
-            text="Complete Your Profile",
-            font=customtkinter.CTkFont(size=20))
-        self.instruction_label.pack(pady=20)
+        # Font sizes
+        label_font = customtkinter.CTkFont(size=17, weight="bold")
+        entry_font = customtkinter.CTkFont(size=16)
+        entry_width = 320
+        entry_height = 50
 
-        # Use student_data or empty dict
+        # Instruction label (centered at top)
+        self.instruction_label = customtkinter.CTkLabel(
+            self.profile_frame, text="Complete Your Profile", font=customtkinter.CTkFont(size=28, weight="bold")
+        )
+        self.instruction_label.place(relx=0.5, rely=0.07, anchor="center")
+
         student_data = student_data or {}
 
-        # Name (left) and Age (right)
-        self.name_label = customtkinter.CTkLabel(self.profile_frame, text="Name", font=customtkinter.CTkFont(size=12))
-        self.name_label.place(rely=0.10, relx=0.08, anchor="w")
-        self.name_entry = customtkinter.CTkEntry(self.profile_frame, font=customtkinter.CTkFont(size=12), width=250)
-        self.name_entry.place(rely=0.16, relx=0.08, anchor="w")
+        # Vertical positions for each row
+        row_positions = [0.23, 0.38, 0.53, 0.68]
+
+        # Name
+        self.name_label = customtkinter.CTkLabel(self.profile_frame, text="Name", font=label_font)
+        self.name_label.place(relx=0.10, rely=row_positions[0], anchor="e")
+        self.name_entry = customtkinter.CTkEntry(self.profile_frame, font=entry_font, width=entry_width, height=entry_height, placeholder_text="Ex. Juan Dela Cruz")
+        self.name_entry.place(relx=0.13, rely=row_positions[0], anchor="w")
         name = f"{student_data.get('first_name', '')} {student_data.get('last_name', '')}".strip()
         self.name_entry.insert(0, name)
 
-        self.age_label = customtkinter.CTkLabel(self.profile_frame, text="Age", font=customtkinter.CTkFont(size=12))
-        self.age_label.place(rely=0.10, relx=0.58, anchor="w")
-        self.age_entry = customtkinter.CTkEntry(self.profile_frame, font=customtkinter.CTkFont(size=12), width=250)
-        self.age_entry.place(rely=0.16, relx=0.58, anchor="w")
+        # Age
+        self.age_label = customtkinter.CTkLabel(self.profile_frame, text="Age", font=label_font)
+        self.age_label.place(relx=0.60, rely=row_positions[0], anchor="e")
+        self.age_entry = customtkinter.CTkEntry(self.profile_frame, font=entry_font, width=entry_width, height=entry_height, placeholder_text="Ex. 20")
+        self.age_entry.place(relx=0.63, rely=row_positions[0], anchor="w")
         self.age_entry.insert(0, str(student_data.get('age', '')))
 
-        # Course (left) and Gender (right)
-        self.course_label = customtkinter.CTkLabel(self.profile_frame, text="Course", font=customtkinter.CTkFont(size=12))
-        self.course_label.place(rely=0.28, relx=0.08, anchor="w")
-        self.course_entry = customtkinter.CTkEntry(self.profile_frame, font=customtkinter.CTkFont(size=12), width=250)
-        self.course_entry.place(rely=0.34, relx=0.08, anchor="w")
-        self.course_entry.insert(0, student_data.get('program', ''))
+        # Course
+        self.course_label = customtkinter.CTkLabel(self.profile_frame, text="Course", font=label_font)
+        self.course_label.place(relx=0.10, rely=row_positions[1], anchor="e")
+        course_choices = [
+            "Bachelor in Technical-Vocational Teacher Education",
+            "Bachelor in Technology and Livelihood Education",
+            "Bachelor of Science in Applied Mathematics",
+            "Bachelor of Science in Applied Physics",
+            "Bachelor of Science in Architecture",
+            "Bachelor of Science in Autotronics",
+            "Bachelor of Science in Chemistry",
+            "Bachelor of Science in Civil Engineering",
+            "Bachelor of Science in Computer Engineering",
+            "Bachelor of Science in Computer Science",
+            "Bachelor of Science in Data Science",
+            "Bachelor of Science in Electrical Engineering",
+            "Bachelor of Science in Electro-Mechanical Technology",
+            "Bachelor of Science in Electronics Engineering",
+            "Bachelor of Science in Electronics Technology",
+            "Bachelor of Science in Energy Systems and Management",
+            "Bachelor of Science in Environmental Science",
+            "Bachelor of Science in Food Technology",
+            "Bachelor of Science in Geodetic Engineering",
+            "Bachelor of Science in Information Technology",
+            "Bachelor of Science in Manufacturing Engineering Technology",
+            "Bachelor of Science in Mechanical Engineering",
+            "Bachelor of Science in Technology Communication Management",
+            "Bachelor of Technology, Operations, and Management",
+            "Bachelor of Secondary Education"
+        ]
+        self.course_combobox = customtkinter.CTkComboBox(self.profile_frame, width=entry_width, height=entry_height, font=entry_font, values=course_choices)
+        self.course_combobox.place(relx=0.13, rely=row_positions[1], anchor="w")
+        course_value = student_data.get('program', '')
+        if course_value and course_value in course_choices:
+            self.course_combobox.set(course_value)
+        else:
+            self.course_combobox.set(course_choices[0])
 
-        self.gender_label = customtkinter.CTkLabel(self.profile_frame, text="Gender", font=customtkinter.CTkFont(size=12))
-        self.gender_label.place(rely=0.28, relx=0.58, anchor="w")
-        self.gender_combobox = customtkinter.CTkComboBox(self.profile_frame, width=250, values=["Male", "Female", "Other"])
-        self.gender_combobox.place(rely=0.34, relx=0.58, anchor="w")
+        # Gender
+        self.gender_label = customtkinter.CTkLabel(self.profile_frame, text="Gender", font=label_font)
+        self.gender_label.place(relx=0.60, rely=row_positions[1], anchor="e")
+        self.gender_combobox = customtkinter.CTkComboBox(self.profile_frame, width=entry_width, height=entry_height, font=entry_font, values=["Male", "Female", "Other"])
+        self.gender_combobox.place(relx=0.63, rely=row_positions[1], anchor="w")
         gender_value = student_data.get('gender', '')
         if gender_value:
             self.gender_combobox.set(gender_value)
         else:
             self.gender_combobox.set("Male")
 
-        # Year Level (left) and Weight (right)
-        self.year_level_label = customtkinter.CTkLabel(self.profile_frame, text="Year Level", font=customtkinter.CTkFont(size=12))
-        self.year_level_label.place(rely=0.46, relx=0.08, anchor="w")
-        self.year_level_entry = customtkinter.CTkEntry(self.profile_frame, font=customtkinter.CTkFont(size=12), width=250)
-        self.year_level_entry.place(rely=0.52, relx=0.08, anchor="w")
-        self.year_level_entry.insert(0, student_data.get('year_level', ''))
+        # Year Level
+        self.year_level_label = customtkinter.CTkLabel(self.profile_frame, text="Year Level", font=label_font)
+        self.year_level_label.place(relx=0.10, rely=row_positions[2], anchor="e")
+        year_choices = ["1st Year", "2nd Year", "3rd Year", "4th Year", "5th Year"]
+        self.year_level_entry = customtkinter.CTkComboBox(self.profile_frame, width=entry_width, height=entry_height, font=entry_font, values=year_choices)
+        self.year_level_entry.place(relx=0.13, rely=row_positions[2], anchor="w")
+        year_level_value = student_data.get('year_level', '')
+        if year_level_value and year_level_value in year_choices:
+            self.year_level_entry.set(year_level_value)
+        else:
+            self.year_level_entry.set(year_choices[0])
 
-        self.weight_label = customtkinter.CTkLabel(self.profile_frame, text="Weight (kg)", font=customtkinter.CTkFont(size=12))
-        self.weight_label.place(rely=0.46, relx=0.58, anchor="w")
-        self.weight_entry = customtkinter.CTkEntry(self.profile_frame, font=customtkinter.CTkFont(size=12), width=250)
-        self.weight_entry.place(rely=0.52, relx=0.58, anchor="w")
+        # Weight
+        self.weight_label = customtkinter.CTkLabel(self.profile_frame, text="Weight (kg)", font=label_font)
+        self.weight_label.place(relx=0.60, rely=row_positions[2], anchor="e")
+        self.weight_entry = customtkinter.CTkEntry(self.profile_frame, font=entry_font, width=entry_width, height=entry_height, placeholder_text="Ex. 70(kg)")
+        self.weight_entry.place(relx=0.63, rely=row_positions[2], anchor="w")
         self.weight_entry.insert(0, str(student_data.get('weight', '')))
 
-        # Email (left) and Height (right)
-        self.email_label = customtkinter.CTkLabel(self.profile_frame, text="Email", font=customtkinter.CTkFont(size=12))
-        self.email_label.place(rely=0.64, relx=0.08, anchor="w")
-        self.email_entry = customtkinter.CTkEntry(self.profile_frame, font=customtkinter.CTkFont(size=12), width=250)
-        self.email_entry.place(rely=0.70, relx=0.08, anchor="w")
+        # Email
+        self.email_label = customtkinter.CTkLabel(self.profile_frame, text="Email", font=label_font)
+        self.email_label.place(relx=0.10, rely=row_positions[3], anchor="e")
+        self.email_entry = customtkinter.CTkEntry(self.profile_frame, font=entry_font, width=entry_width, height=entry_height)
+        self.email_entry.place(relx=0.13, rely=row_positions[3], anchor="w")
         self.email_entry.insert(0, student_data.get('email', ''))
 
-        self.height_label = customtkinter.CTkLabel(self.profile_frame, text="Height (cm)", font=customtkinter.CTkFont(size=12))
-        self.height_label.place(rely=0.64, relx=0.58, anchor="w")
-        self.height_entry = customtkinter.CTkEntry(self.profile_frame, font=customtkinter.CTkFont(size=12), width=250)
-        self.height_entry.place(rely=0.70, relx=0.58, anchor="w")
+        # Height
+        self.height_label = customtkinter.CTkLabel(self.profile_frame, text="Height (cm)", font=label_font)
+        self.height_label.place(relx=0.60, rely=row_positions[3], anchor="e")
+        self.height_entry = customtkinter.CTkEntry(self.profile_frame, font=entry_font, width=entry_width, height=entry_height, placeholder_text="Ex. 170(cm)")
+        self.height_entry.place(relx=0.63, rely=row_positions[3], anchor="w")
         self.height_entry.insert(0, str(student_data.get('height', '')))
 
-        # Back and Confirm buttons (bottom center)
+        # Back and Confirm buttons (centered at bottom)
         self.back_button = customtkinter.CTkButton(self.profile_frame, text="Back", command=self.on_back,
-                                                     font=customtkinter.CTkFont(size=14), width=200)
-        self.back_button.place(rely=0.88, relx=0.35, anchor="center")
+                                                     font=customtkinter.CTkFont(size=24), width=200, height=40)
+        self.back_button.place(relx=0.38, rely=0.88, anchor="center")
 
         self.confirm_button = customtkinter.CTkButton(self.profile_frame, text="Confirm", command=self.update_profile,
-                                                     font=customtkinter.CTkFont(size=14), width=200)
-        self.confirm_button.place(rely=0.88, relx=0.65, anchor="center")
+                                                     font=customtkinter.CTkFont(size=24), width=200, height=40)
+        self.confirm_button.place(relx=0.60, rely=0.88, anchor="center")
 
     def update_profile(self):
         # Split name into first and last name
@@ -105,10 +153,10 @@ class ProfileScreen(customtkinter.CTkFrame):
             "last_name": last_name,
             "year_level": self.year_level_entry.get().strip(),
             "email": self.email_entry.get().strip(),
-            "program": self.course_entry.get().strip(),
-            "age": int(self.age_entry.get().strip()) if self.age_entry.get().strip().isdigit() else None,
-            "height": int(self.height_entry.get().strip()) if self.height_entry.get().strip().isdigit() else None,
-            "weight": int(self.weight_entry.get().strip()) if self.weight_entry.get().strip().isdigit() else None,
+            "program": self.course_combobox.get(),
+            "age": int(self.age_entry.get().strip()) if self.age_entry.get().strip().isdigit() else "",
+            "height": int(self.height_entry.get().strip()) if self.height_entry.get().strip().isdigit() else "",
+            "weight": int(self.weight_entry.get().strip()) if self.weight_entry.get().strip().isdigit() else "",
             "gender": self.gender_combobox.get(),
             "last_update": datetime.utcnow().isoformat()
         }
