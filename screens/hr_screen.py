@@ -10,7 +10,7 @@ class HeartRateScreen(customtkinter.CTkFrame):
         self.on_back = on_back
 
         # Main frame (left side, same as temperature page)
-        self.center_frame = customtkinter.CTkFrame(self, width=400, height=350, corner_radius=10)
+        self.center_frame = customtkinter.CTkFrame(self, width=400, height=350, corner_radius=10, border_width=3)
         self.center_frame.place(relx=0.08, rely=0.08, relwidth=0.45, relheight=0.7)
 
         # Inner frame for centering input
@@ -18,12 +18,12 @@ class HeartRateScreen(customtkinter.CTkFrame):
         self.inner_frame.place(relx=0.5, rely=0.4, anchor="center")
 
         self.label = customtkinter.CTkLabel(
-            self.inner_frame, text="Enter Heart Rate", font=customtkinter.CTkFont(size=20, weight="bold")
+            self.inner_frame, text="Enter Heart Rate", font=customtkinter.CTkFont(size=28, weight="bold")
         )
         self.label.pack(pady=(0, 20))
 
         self.entry = customtkinter.CTkEntry(
-            self.inner_frame, font=customtkinter.CTkFont(size=16), width=180
+            self.inner_frame, font=customtkinter.CTkFont(size=16), width=180, height=50, placeholder_text="Ex. 75"
         )
         self.entry.pack(pady=10)
 
@@ -32,12 +32,12 @@ class HeartRateScreen(customtkinter.CTkFrame):
         self.button_frame.pack(side="bottom", pady=40)
 
         self.back_button = customtkinter.CTkButton(
-            self.button_frame, text="Back", width=120, command=self.on_back if self.on_back else self.default_back
+            self.button_frame, text="Back", font=customtkinter.CTkFont(size=24), width=200, height=40, command=self.on_back if self.on_back else self.default_back
         )
         self.back_button.pack(side="left", padx=20)
 
         self.next_button = customtkinter.CTkButton(
-            self.button_frame, text="Next", width=120, command=self.on_next
+            self.button_frame, text="Next", font=customtkinter.CTkFont(size=24), width=200, height=40, command=self.on_next
         )
         self.next_button.pack(side="left", padx=20)
 
