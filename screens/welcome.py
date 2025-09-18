@@ -36,12 +36,12 @@ class WelcomeScreen(customtkinter.CTkFrame):
         images_frame.pack(expand=False, fill="x", pady=(0, 0), padx=20)  # Add horizontal padding
 
         # Mood image
-        self.mood_img = customtkinter.CTkImage(Image.open(mood_path), size=(700, 400))
+        self.mood_img = customtkinter.CTkImage(Image.open(mood_path), size=(400, 400))
         self.mood_label = customtkinter.CTkLabel(images_frame, image=self.mood_img, text="")
         self.mood_label.grid(row=1, column=0, padx=(8, 8), pady=0, sticky="ew")  # Add padding
 
         # Vital image
-        self.vital_img = customtkinter.CTkImage(Image.open(vital_path), size=(700, 400))
+        self.vital_img = customtkinter.CTkImage(Image.open(vital_path), size=(400, 400))
         self.vital_label = customtkinter.CTkLabel(images_frame, image=self.vital_img, text="")
         self.vital_label.grid(row=1, column=1, padx=(8, 8), pady=0, sticky="w")  # Add padding
 

@@ -64,7 +64,6 @@ class LoginFrame(customtkinter.CTkFrame):
         self.login_button = customtkinter.CTkButton(
             self.login_frame, text="LOGIN", width=280, height=40,
             font=customtkinter.CTkFont(size=16, weight="bold"),
-            fg_color="#2196F3", hover_color="#1976D2",
             command=self.validate_login
         )
         self.login_button.pack(pady=(0, 10), side="bottom")
