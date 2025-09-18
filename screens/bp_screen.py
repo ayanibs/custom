@@ -22,10 +22,23 @@ class BloodPressureScreen(customtkinter.CTkFrame):
         )
         self.label.pack(pady=(0, 20))
 
-        self.entry = customtkinter.CTkEntry(
-            self.inner_frame, font=customtkinter.CTkFont(size=16), width=180, height=50, placeholder_text="Ex. 120/80"
+        # Systolic input
+        self.systolic_entry = customtkinter.CTkEntry(
+            self.inner_frame, font=customtkinter.CTkFont(size=16), width=85, height=50, placeholder_text="Systolic"
         )
-        self.entry.pack(pady=10)
+        self.systolic_entry.pack(side="left", padx=(0, 10), pady=10)
+
+        # Separator label
+        self.slash_label = customtkinter.CTkLabel(
+            self.inner_frame, text="/", font=customtkinter.CTkFont(size=24)
+        )
+        self.slash_label.pack(side="left", pady=10)
+
+        # Diastolic input
+        self.diastolic_entry = customtkinter.CTkEntry(
+            self.inner_frame, font=customtkinter.CTkFont(size=16), width=85, height=50, placeholder_text="Diastolic"
+        )
+        self.diastolic_entry.pack(side="left", padx=(10, 0), pady=10)
 
         # Button frame at the bottom
         self.button_frame = customtkinter.CTkFrame(self.center_frame, fg_color="transparent")
@@ -45,9 +58,12 @@ class BloodPressureScreen(customtkinter.CTkFrame):
         print("Back pressed (no handler provided)")
 
     def on_next(self):
-        blood_pressure = self.entry.get()
-        if not blood_pressure:
+        systolic = self.systolic_entry.get()
+        diastolic = self.diastolic_entry.get()
+        if not systolic or not diastolic:
             return
+
+        blood_pressure = f"{systolic}/{diastolic}"
 
         response = supabase.table("student_support_record").select("*").eq("student_id", self.student_id).single().execute()
         existing = response.data if response.data else {}
