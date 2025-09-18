@@ -107,7 +107,7 @@ class KioskApp(customtkinter.CTk):
         if self.current_frame:
             self.current_frame.destroy()
         from screens.mood import MoodScreen
-        self.current_frame = MoodScreen(self, proceed_callback=lambda: self.show_logout_page(student_id), on_back=lambda: self.show_next_page(student_id), student_id=student_id)
+        self.current_frame = MoodScreen(self, proceed_callback=lambda: self.show_logout_page(student_id), on_back=lambda: self.show_hr_page(student_id), student_id=student_id)
         self.current_frame.pack(fill="both", expand=True)
 
     def show_logout_page(self, student_id=None):

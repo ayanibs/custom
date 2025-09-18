@@ -9,7 +9,7 @@ class LogoutScreen(customtkinter.CTkFrame):
         self.student_id = student_id
 
         # Create logout frame
-        self.logout_frame = customtkinter.CTkFrame(self, corner_radius=10)
+        self.logout_frame = customtkinter.CTkFrame(self, corner_radius=10, border_width=3)
         self.logout_frame.place(relx=0.1, rely=0.1, relwidth=0.8, relheight=0.8)
 
         # Thank you message

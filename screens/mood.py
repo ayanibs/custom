@@ -14,26 +14,27 @@ class MoodScreen(customtkinter.CTkFrame):
         self.proceed_callback = proceed_callback
         self.on_back = on_back
 
-        # Create mood frame
-        self.mood_frame = customtkinter.CTkFrame(self, corner_radius=0)
+        # Create mood frame (main frame with border)
+        self.mood_frame = customtkinter.CTkFrame(self, corner_radius=30, border_width=3)
         self.mood_frame.place(relx=0.1, rely=0.1, relwidth=0.8, relheight=0.8)
 
         # Header label
         self.header_label = customtkinter.CTkLabel(
             self.mood_frame, text="How are you feeling today?",
-            font=customtkinter.CTkFont(size=18, weight="bold")
+            font=customtkinter.CTkFont(size=28, weight="bold")
         )
-        self.header_label.pack(pady=30)
+        self.header_label.pack(pady=(30, 10), padx=30)  # Add horizontal padding
 
         # Emotions split into two rows
         row1 = ["Happy", "Sad", "Nothing", "Worried", "Anxious"]
         row2 = ["Confused", "Fatigue", "Dizziness", "Numb", "Irritable"]
         self.emotion_buttons = {}
 
-        # Frame for first row
+        # Frame for first row (no border, add padding)
         self.emotion_frame1 = customtkinter.CTkFrame(
-            self.mood_frame, fg_color=self.mood_frame.cget("fg_color"))
-        self.emotion_frame1.pack(pady=(40, 10))
+            self.mood_frame, fg_color="transparent"
+        )
+        self.emotion_frame1.pack(pady=(80, 40), padx=30)  # Add horizontal padding
         for emotion in row1:
             btn = customtkinter.CTkButton(
                 self.emotion_frame1,
@@ -48,10 +49,11 @@ class MoodScreen(customtkinter.CTkFrame):
             btn.pack(side="left", padx=12, pady=10)
             self.emotion_buttons[emotion] = btn
 
-        # Frame for second row
+        # Frame for second row (no border, add padding)
         self.emotion_frame2 = customtkinter.CTkFrame(
-            self.mood_frame, fg_color=self.mood_frame.cget("fg_color"))
-        self.emotion_frame2.pack(pady=(10, 40))
+            self.mood_frame, fg_color="transparent"
+        )
+        self.emotion_frame2.pack(pady=(80, 20), padx=30)  # Add horizontal padding
         for emotion in row2:
             btn = customtkinter.CTkButton(
                 self.emotion_frame2,
@@ -66,37 +68,33 @@ class MoodScreen(customtkinter.CTkFrame):
             btn.pack(side="left", padx=12, pady=10)
             self.emotion_buttons[emotion] = btn
 
-        # Frame for Back and Confirm buttons (same color as mood_frame)
+        # Frame for Back and Confirm buttons (no border, add padding)
         self.bottom_buttons_frame = customtkinter.CTkFrame(
-            self.mood_frame, fg_color=self.mood_frame.cget("fg_color")
+            self.mood_frame, fg_color="transparent"
         )
-        self.bottom_buttons_frame.pack(side="bottom", fill="x", pady=50)
+        self.bottom_buttons_frame.pack(side="bottom", fill="x", pady=(20, 30), padx=30)  # Add horizontal padding
 
         # Back Button
         self.back_button = customtkinter.CTkButton(
             self.bottom_buttons_frame,
             text="Back",
             font=customtkinter.CTkFont(size=18),
-            fg_color="black",
-            text_color="white",
             width=120,
             height=40,
             command=self.on_back
         )
-        self.back_button.pack(side="left", padx=(50, 0))
+        self.back_button.pack(side="left", padx=(50, 0), pady=10)
 
         # Confirm Button
         self.confirm_button = customtkinter.CTkButton(
             self.bottom_buttons_frame,
             text="Confirm",
             font=customtkinter.CTkFont(size=18),
-            fg_color="black",
-            text_color="white",
             width=120,
             height=40,
             command=self.on_confirm
         )
-        self.confirm_button.pack(side="right", padx=(0, 50))
+        self.confirm_button.pack(side="right", padx=(0, 50), pady=10)
 
     def toggle_emotion(self, emotion):
         if emotion in self.selected_emotions:
