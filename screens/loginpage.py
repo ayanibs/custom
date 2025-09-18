@@ -118,6 +118,7 @@ class LoginFrame(customtkinter.CTkFrame):
             self.message.configure(text=f"Login failed: {str(e)}", text_color="red")
 
     def on_back(self):
+        close_keyboard()  # <-- Add this line
         if self.back_callback:
             self.back_callback()
 
