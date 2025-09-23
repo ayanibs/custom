@@ -17,7 +17,7 @@ class QRFrame(customtkinter.CTkFrame):
 
         # Main QR frame (left side, solid color, blue border)
         self.qr_frame = customtkinter.CTkFrame(self, corner_radius=10, border_width=3)
-        self.qr_frame.place(relx=0.08, rely=0.08, relwidth=0.45, relheight=0.7)
+        self.qr_frame.place(relx=0.08, rely=0.15, relwidth=0.45, relheight=0.7)
 
         # QR image (centered vertically)
         self.qr_img = customtkinter.CTkImage(Image.open(qr_path), size=(200, 200))

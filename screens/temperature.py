@@ -12,7 +12,7 @@ class TemperatureScreen(customtkinter.CTkFrame):
 
         # Main frame (left side, same as login page)
         self.center_frame = customtkinter.CTkFrame(self, width=400, height=350, corner_radius=10, border_width=3)
-        self.center_frame.place(relx=0.08, rely=0.08, relwidth=0.45, relheight=0.7)
+        self.center_frame.place(relx=0.08, rely=0.15, relwidth=0.45, relheight=0.7)
 
         # Inner frame for centering input
         self.inner_frame = customtkinter.CTkFrame(self.center_frame, fg_color="transparent")
