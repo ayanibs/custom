@@ -28,6 +28,12 @@ class TemperatureScreen(customtkinter.CTkFrame):
         )
         self.entry.pack(pady=10)
 
+        # Error label for validation messages
+        self.error_label = customtkinter.CTkLabel(
+            self.inner_frame, text="", font=customtkinter.CTkFont(size=12), text_color="red"
+        )
+        self.error_label.pack(pady=5)
+
         # Button frame at the bottom
         self.button_frame = customtkinter.CTkFrame(self.center_frame, fg_color="transparent")
         self.button_frame.pack(side="bottom", pady=40)
@@ -42,10 +48,23 @@ class TemperatureScreen(customtkinter.CTkFrame):
 
 
     def on_next(self):
-        temperature = self.entry.get()
-        if not temperature:
-            # Optionally show an error message
+        temperature_str = self.entry.get().strip()
+        if not temperature_str:
+            self.error_label.configure(text="Please enter temperature")
             return
+
+        try:
+            temperature = float(temperature_str)
+        except ValueError:
+            self.error_label.configure(text="Please enter a valid number")
+            return
+
+        if temperature < 35.5 or temperature > 42.2:
+            self.error_label.configure(text="Temperature must be between 35.5 and 42.2")
+            return
+
+        # Clear any previous error
+        self.error_label.configure(text="")
 
         # Fetch existing record
         response = supabase.table("student_support_record").select("*").eq("student_id", self.student_id).single().execute()
@@ -55,7 +74,7 @@ class TemperatureScreen(customtkinter.CTkFrame):
 
         data = {
             "student_id": self.student_id,
-            "temperature": temperature,
+            "temperature": temperature_str,  # Store as string to preserve original input format
             "mood_level": existing.get("mood_level", ""),
             "blood_pressure": existing.get("blood_pressure", ""),
             "heart_rate": existing.get("heart_rate", ""),
