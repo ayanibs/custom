@@ -22,23 +22,33 @@ class BloodPressureScreen(customtkinter.CTkFrame):
         )
         self.label.pack(pady=(0, 20))
 
+        # Subframe for input fields to group them horizontally
+        self.input_frame = customtkinter.CTkFrame(self.inner_frame, fg_color="transparent")
+        self.input_frame.pack(pady=10)
+
         # Systolic input
         self.systolic_entry = customtkinter.CTkEntry(
-            self.inner_frame, font=customtkinter.CTkFont(size=16), width=85, height=50, placeholder_text="Systolic"
+            self.input_frame, font=customtkinter.CTkFont(size=16), width=85, height=50, placeholder_text="Systolic"
         )
-        self.systolic_entry.pack(side="left", padx=(0, 10), pady=10)
+        self.systolic_entry.pack(side="left", padx=(0, 10))
 
         # Separator label
         self.slash_label = customtkinter.CTkLabel(
-            self.inner_frame, text="/", font=customtkinter.CTkFont(size=24)
+            self.input_frame, text="/", font=customtkinter.CTkFont(size=24)
         )
-        self.slash_label.pack(side="left", pady=10)
+        self.slash_label.pack(side="left")
 
         # Diastolic input
         self.diastolic_entry = customtkinter.CTkEntry(
-            self.inner_frame, font=customtkinter.CTkFont(size=16), width=85, height=50, placeholder_text="Diastolic"
+            self.input_frame, font=customtkinter.CTkFont(size=16), width=85, height=50, placeholder_text="Diastolic"
         )
-        self.diastolic_entry.pack(side="left", padx=(10, 0), pady=10)
+        self.diastolic_entry.pack(side="left", padx=(10, 0))
+
+        # Error label for validation messages, placed under the input frame
+        self.error_label = customtkinter.CTkLabel(
+            self.inner_frame, text="", font=customtkinter.CTkFont(size=12), text_color="red"
+        )
+        self.error_label.pack(pady=5)
 
         # Button frame at the bottom
         self.button_frame = customtkinter.CTkFrame(self.center_frame, fg_color="transparent")
@@ -58,12 +68,31 @@ class BloodPressureScreen(customtkinter.CTkFrame):
         print("Back pressed (no handler provided)")
 
     def on_next(self):
-        systolic = self.systolic_entry.get()
-        diastolic = self.diastolic_entry.get()
-        if not systolic or not diastolic:
+        systolic_str = self.systolic_entry.get().strip()
+        diastolic_str = self.diastolic_entry.get().strip()
+        if not systolic_str or not diastolic_str:
+            self.error_label.configure(text="Please enter both systolic and diastolic values")
             return
 
-        blood_pressure = f"{systolic}/{diastolic}"
+        try:
+            systolic = float(systolic_str)
+            diastolic = float(diastolic_str)
+        except ValueError:
+            self.error_label.configure(text="Please enter valid numbers for both fields")
+            return
+
+        if systolic < 70 or systolic > 190:
+            self.error_label.configure(text="Systolic must be between 70 and 190")
+            return
+
+        if diastolic < 40 or diastolic > 120:
+            self.error_label.configure(text="Diastolic must be between 40 and 120")
+            return
+
+        # Clear any previous error
+        self.error_label.configure(text="")
+
+        blood_pressure = f"{systolic_str}/{diastolic_str}"
 
         response = supabase.table("student_support_record").select("*").eq("student_id", self.student_id).single().execute()
         existing = response.data if response.data else {}
