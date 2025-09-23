@@ -19,7 +19,7 @@ class LoginFrame(customtkinter.CTkFrame):
 
         # Main frame (left side, solid color)
         self.login_frame = customtkinter.CTkFrame(self, corner_radius=10, border_width=3)
-        self.login_frame.place(relx=0.08, rely=0.08, relwidth=0.45, relheight=0.7,)
+        self.login_frame.place(relx=0.08, rely=0.15, relwidth=0.45, relheight=0.7,)
 
         # Welcome label
         self.login_label = customtkinter.CTkLabel(
@@ -70,7 +70,7 @@ class LoginFrame(customtkinter.CTkFrame):
         # Logo and text (right side)
         self.logo_img = customtkinter.CTkImage(Image.open(logo_path), size=(250, 250))
         self.logo_label = customtkinter.CTkLabel(self, image=self.logo_img, text="")
-        self.logo_label.place(relx=0.7, rely=0.21)
+        self.logo_label.place(relx=0.7, rely=0.20)
 
         self.vitalsense_label = customtkinter.CTkLabel(
             self, text="VITALSENSE",
