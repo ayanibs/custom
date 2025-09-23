@@ -17,7 +17,6 @@ class LoginFrame(customtkinter.CTkFrame):
         assets_path = os.path.join(current_path, "..", "assets")
         logo_path = os.path.join(assets_path, "logo.png")
 
-
         # Main frame (left side, solid color)
         self.login_frame = customtkinter.CTkFrame(self, corner_radius=10, border_width=3)
         self.login_frame.place(relx=0.08, rely=0.08, relwidth=0.45, relheight=0.7,)
@@ -79,9 +78,9 @@ class LoginFrame(customtkinter.CTkFrame):
         )
         self.vitalsense_label.place(relx=0.7, rely=0.65)
 
-        # Bind focus events to show keyboard
-        self.id_entry.bind("<FocusIn>", lambda event: show_keyboard())
-        self.password_entry.bind("<FocusIn>", lambda event: show_keyboard())
+        # Bind focus events to show keyboard (COMMENTED OUT TO DISABLE KEYBOARD ACTIVATION)
+        # self.id_entry.bind("<FocusIn>", lambda event: show_keyboard())
+        # self.password_entry.bind("<FocusIn>", lambda event: show_keyboard())
 
     def validate_login(self):
         student_id = self.id_entry.get()
@@ -107,7 +106,7 @@ class LoginFrame(customtkinter.CTkFrame):
                     self.message.configure(text="Login successful!", text_color="green")
                     # Proceed to consent page after login
                     if self.proceed_to_consent:
-                        close_keyboard()  # <-- Close keyboard here
+                        # close_keyboard()  # <-- COMMENTED OUT TO DISABLE KEYBOARD CLOSING
                         self.after(1000, lambda: self.proceed_to_consent(student_id))
                 else:
                     self.message.configure(text="Invalid credentials!", text_color="red")
@@ -118,23 +117,25 @@ class LoginFrame(customtkinter.CTkFrame):
             self.message.configure(text=f"Login failed: {str(e)}", text_color="red")
 
     def on_back(self):
-        close_keyboard()  # <-- Add this line
+        # close_keyboard()  # <-- COMMENTED OUT TO DISABLE KEYBOARD CLOSING
         if self.back_callback:
             self.back_callback()
 
     def exit_fullscreen(self, event=None):
         self.master.destroy()
 
-def show_keyboard():
-    if sys.platform.startswith("linux"):
-        subprocess.Popen(["onboard"])
-    elif sys.platform.startswith("win"):
-        import os
-        os.startfile("osk.exe")
+# show_keyboard() function (COMMENTED OUT TO DISABLE ENTIRE KEYBOARD FUNCTIONALITY)
+# def show_keyboard():
+#     if sys.platform.startswith("linux"):
+#         subprocess.Popen(["onboard"])
+#     elif sys.platform.startswith("win"):
+#         import os
+#         os.startfile("osk.exe")
 
-def close_keyboard():
-    if sys.platform.startswith("linux"):
-        subprocess.Popen(["pkill", "onboard"])
-    elif sys.platform.startswith("win"):
-        import os
-        os.system("taskkill /IM osk.exe /F")
+# close_keyboard() function (COMMENTED OUT TO DISABLE ENTIRE KEYBOARD FUNCTIONALITY)
+# def close_keyboard():
+#     if sys.platform.startswith("linux"):
+#         subprocess.Popen(["pkill", "onboard"])
+#     elif sys.platform.startswith("win"):
+#         import os
+#         os.system("taskkill /IM osk.exe /F")

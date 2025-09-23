@@ -27,6 +27,12 @@ class HeartRateScreen(customtkinter.CTkFrame):
         )
         self.entry.pack(pady=10)
 
+        # Error label for validation messages, placed under the input field
+        self.error_label = customtkinter.CTkLabel(
+            self.inner_frame, text="", font=customtkinter.CTkFont(size=12), text_color="red"
+        )
+        self.error_label.pack(pady=5)
+
         # Button frame at the bottom
         self.button_frame = customtkinter.CTkFrame(self.center_frame, fg_color="transparent")
         self.button_frame.pack(side="bottom", pady=40)
@@ -45,9 +51,23 @@ class HeartRateScreen(customtkinter.CTkFrame):
         print("Back pressed (no handler provided)")
 
     def on_next(self):
-        heart_rate = self.entry.get()
-        if not heart_rate:
+        heart_rate_str = self.entry.get().strip()
+        if not heart_rate_str:
+            self.error_label.configure(text="Please enter heart rate")
             return
+
+        try:
+            heart_rate = float(heart_rate_str)
+        except ValueError:
+            self.error_label.configure(text="Please enter a valid number")
+            return
+
+        if heart_rate < 75 or heart_rate > 170:
+            self.error_label.configure(text="Heart rate must be between 75 and 170")
+            return
+
+        # Clear any previous error
+        self.error_label.configure(text="")
 
         response = supabase.table("student_support_record").select("*").eq("student_id", self.student_id).single().execute()
         existing = response.data if response.data else {}
@@ -59,7 +79,7 @@ class HeartRateScreen(customtkinter.CTkFrame):
             "temperature": existing.get("temperature", ""),
             "mood_level": existing.get("mood_level", ""),
             "blood_pressure": existing.get("blood_pressure", ""),
-            "heart_rate": heart_rate,
+            "heart_rate": heart_rate_str,  # Store as string to preserve original input format
             "record_at": record_time
         }
         try:
