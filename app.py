@@ -1,3 +1,4 @@
+import sys
 import customtkinter
 from screens.welcome import WelcomeScreen
 from screens.loginpage import LoginFrame
@@ -12,12 +13,16 @@ class KioskApp(customtkinter.CTk):
     def __init__(self):
         super().__init__()
         self.title("VitalSense Kiosk")
-        self.attributes('-fullscreen', True)
-        self.bind("<Escape>", self.exit_fullscreen)  # Allow exit fullscreen with Escape key
         self.resizable(False, False)
+        self.bind("<Escape>", self.exit_fullscreen)
         self.current_frame = None
-        self.show_welcome_page()  # Show welcome screen first
+        self.after(100, self.force_fullscreen)  # Ensure fullscreen after window appears
+        self.show_welcome_page()
 
+    def force_fullscreen(self):
+        self.attributes('-fullscreen', True)
+        if sys.platform.startswith("linux"):
+            self.overrideredirect(True)  # Remove window decorations on Linux
 
     def show_welcome_page(self):
         if self.current_frame:
