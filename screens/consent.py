@@ -3,7 +3,7 @@ from config.supabase_client import supabase
 from datetime import datetime
 
 
-consent = "Do you agree to share your recorded health and emotional status data with the University Clinic and the Office of Guidance and Counseling Services to help monitor your well-being while enrolled at USTP? consent laws for online interactions are governed by the Data Privacy Act of 2012 (RA 10173) and the Cybercrime Prevention Act of 2012 (RA 10175), which protect personal data, private communications, and prevent the spread of unauthorized intimate content."
+consent = "To help us support you, can we share your health and emotional data with the USTP Clinic and Guidance Office? This helps us monitor your well-being. Your information is protected under the Data Privacy Act and Cybercrime Prevention Act."
 
 
 class ConsentScreen(customtkinter.CTkFrame):
