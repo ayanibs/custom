@@ -14,16 +14,16 @@ class MoodScreen(customtkinter.CTkFrame):
         self.proceed_callback = proceed_callback
         self.on_back = on_back
 
-        # Create mood frame (main frame with border)
+        # Create mood frame (main frame with border) - increased height slightly for more space
         self.mood_frame = customtkinter.CTkFrame(self, corner_radius=30, border_width=3)
-        self.mood_frame.place(relx=0.1, rely=0.1, relwidth=0.8, relheight=0.8)
+        self.mood_frame.place(relx=0.05, rely=0.05, relwidth=0.9, relheight=0.9)  # Reduced margins, increased size
 
-        # Header label
+        # Header label - reduced top padding
         self.header_label = customtkinter.CTkLabel(
             self.mood_frame, text="How are you feeling today?",
             font=customtkinter.CTkFont(size=28, weight="bold")
         )
-        self.header_label.pack(pady=(30, 10), padx=30)  # Add horizontal padding
+        self.header_label.pack(pady=(20, 5), padx=20)  # Reduced padding
 
         # Emotions split into two rows
         row1 = ["Happy", "Sad", "Nothing", "Worried", "Anxious"]
@@ -37,14 +37,14 @@ class MoodScreen(customtkinter.CTkFrame):
             path = os.path.join(os.path.dirname(__file__), "..", "assets", filename)
             return customtkinter.CTkImage(Image.open(path), size=(64, 64))
 
-        # --- First row ---
+        # --- First row --- reduced padding
         self.emotion_frame1 = customtkinter.CTkFrame(
             self.mood_frame, fg_color="transparent"
         )
-        self.emotion_frame1.pack(pady=(20, 10), padx=30)  # Reduced pady
+        self.emotion_frame1.pack(pady=(10, 5), padx=20)  # Reduced pady and padx
         for emotion in row1:
             btn_frame = customtkinter.CTkFrame(self.emotion_frame1, fg_color="transparent")
-            btn_frame.pack(side="left", padx=18, pady=10)
+            btn_frame.pack(side="left", padx=10, pady=5)  # Reduced padx and pady
 
             img = get_emotion_image(emotion)
             btn = customtkinter.CTkButton(
@@ -63,17 +63,17 @@ class MoodScreen(customtkinter.CTkFrame):
                 font=customtkinter.CTkFont(size=14),
                 text_color="black"
             )
-            lbl.pack(pady=(5, 0))
+            lbl.pack(pady=(2, 0))  # Minimal pady for label
             self.emotion_buttons[emotion] = btn
 
-        # --- Second row ---
+        # --- Second row --- significantly reduced top padding to make space for buttons
         self.emotion_frame2 = customtkinter.CTkFrame(
             self.mood_frame, fg_color="transparent"
         )
-        self.emotion_frame2.pack(pady=(80, 20), padx=30)
+        self.emotion_frame2.pack(pady=(5, 10), padx=20)  # Reduced from (80,20) to (5,10), reduced padx
         for emotion in row2:
             btn_frame = customtkinter.CTkFrame(self.emotion_frame2, fg_color="transparent")
-            btn_frame.pack(side="left", padx=18, pady=10)
+            btn_frame.pack(side="left", padx=10, pady=5)  # Reduced padx and pady
 
             img = get_emotion_image(emotion)
             btn = customtkinter.CTkButton(
@@ -92,36 +92,36 @@ class MoodScreen(customtkinter.CTkFrame):
                 font=customtkinter.CTkFont(size=14),
                 text_color="black"
             )
-            lbl.pack(pady=(5, 0))
+            lbl.pack(pady=(2, 0))  # Minimal pady for label
             self.emotion_buttons[emotion] = btn
 
-        # Frame for Back and Confirm buttons (no border, add padding)
+        # Frame for Back and Confirm buttons (no border, reduced padding)
         self.bottom_buttons_frame = customtkinter.CTkFrame(
             self.mood_frame, fg_color="transparent"
         )
-        self.bottom_buttons_frame.pack(side="bottom", fill="x", pady=(20, 30), padx=30)  # Add horizontal padding
+        self.bottom_buttons_frame.pack(side="bottom", fill="x", pady=(10, 20), padx=20)  # Reduced pady and padx
 
-        # Back Button
+        # Back Button - reduced width and padx for better fit
         self.back_button = customtkinter.CTkButton(
             self.bottom_buttons_frame,
             text="Back",
             font=customtkinter.CTkFont(size=18),
-            width=120,
+            width=100,  # Slightly reduced width
             height=40,
             command=self.on_back
         )
-        self.back_button.pack(side="left", padx=(50, 0), pady=10)
+        self.back_button.pack(side="left", padx=(20, 10), pady=5)  # Reduced padx
 
-        # Confirm Button
+        # Confirm Button - reduced width and padx for better fit
         self.confirm_button = customtkinter.CTkButton(
             self.bottom_buttons_frame,
             text="Confirm",
             font=customtkinter.CTkFont(size=18),
-            width=120,
+            width=100,  # Slightly reduced width
             height=40,
             command=self.on_confirm
         )
-        self.confirm_button.pack(side="right", padx=(0, 50), pady=10)
+        self.confirm_button.pack(side="right", padx=(10, 20), pady=5)  # Reduced padx
 
     def toggle_emotion(self, emotion):
         if emotion in self.selected_emotions:
